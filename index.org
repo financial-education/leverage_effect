@@ -3,4 +3,6 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
 
-The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  
+The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  
+
+This observation is called the /leverage effect/ after one of the possible explanations.  
