@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-08-17 Wed 14:22 -->
+<!-- 2022-09-04 Sun 19:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Leverage Effect</title>
@@ -20,13 +20,55 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">The Leverage Effect</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org2570da9">1. Implied Volatility</a></li>
+<li><a href="#org162b700">2. Historical Volatility</a></li>
+</ul>
+</div>
+</div>
 <p>
-The <b>Leverage Effect</b> is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  
+The <b>Leverage Effect</b> is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  
 </p>
+
+<p>
+This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the <i>leverage effect</i> after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Empirical evidence, however, generally <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=256109">doesn't support this leverage explanation of the <i>Leverage Effect</i></a>.  The phenomena tends to occur in down markets, though not when leverage changes for other reasons.
+</p>
+
+<p>
+Below we take a look at the relationship between stock prices and both implied and historical volatility.
+</p>
+
+<p>
+We'll use data from Yahoo Finance:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #c099ff;">import</span> yfinance <span style="color: #c099ff;">as</span> yf
+</pre>
+</div>
+
+
+<div id="outline-container-org2570da9" class="outline-2">
+<h2 id="org2570da9"><span class="section-number-2">1.</span> Implied Volatility</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Below we'll take a look at the relationship between changes in the S&amp;P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&amp;P 500.
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-org162b700" class="outline-2">
+<h2 id="org162b700"><span class="section-number-2">2.</span> Historical Volatility</h2>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2022-08-17 Wed 14:22</p>
+<p class="date">Created: 2022-09-04 Sun 19:27</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

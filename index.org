@@ -5,4 +5,23 @@
 
 The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  
 
-This observation is called the /leverage effect/ after one of the possible explanations.  
+This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the /leverage effect/ after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Empirical evidence, however, generally [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=256109][doesn't support this leverage explanation of the /Leverage Effect/]].  The phenomena tends to occur in down markets, though not when leverage changes for other reasons.
+
+Below we take a look at the relationship between stock prices and both implied and historical volatility.
+
+We'll use data from Yahoo Finance:
+
+#+begin_src python :session lev
+import yfinance as yf
+#+end_src
+
+
+* Implied Volatility
+
+Below we'll take a look at the relationship between changes in the S&P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&P 500.
+
+
+
+* Historical Volatility
+
+
