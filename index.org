@@ -2,6 +2,7 @@
 #+author: Matt Brigida, Ph.D.
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
+#+PROPERTY: header-args    :exports none
 
 The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  
 
@@ -11,16 +12,96 @@ Below we take a look at the relationship between stock prices and both implied a
 
 We'll use data from Yahoo Finance:
 
-#+begin_src python :session lev
+#+begin_src python :session lev :eval no
 import yfinance as yf
 #+end_src
+
+#+begin_src python :session lev :eval yes
+import pandas as pd
+#+end_src
+
+#+RESULTS:
+
+
 
 
 * Implied Volatility
 
 Below we'll take a look at the relationship between changes in the S&P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&P 500.
 
+#+name: get_vix
+#+begin_src python :session lev :eval no
+vix = yf.Ticker("^VIX")
 
+# get historical market data
+vix_hist = vix.history(period="max")
+#+end_src
+
+#+RESULTS:
+
+#+name:get_spy
+#+begin_src python :session lev :eval no
+sp = yf.Ticker("^GSPC")
+
+# get historical market data
+sp_hist = sp.history(period="max")
+#+end_src
+
+#+RESULTS: get_spy
+
+
+#+begin_src python :session lev :eval no
+vix_hist.to_csv("vix_data.csv")
+sp_hist.to_csv("sp_data.csv")
+#+end_src
+
+#+RESULTS:
+: None
+
+#+begin_src python :session lev
+vix_data = pd.read_csv("./vix_data.csv")
+sp_data = pd.read_csv("./sp_data.csv")
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :session lev 
+vix_data.index = pd.to_datetime(vix_data['Date'])
+sp_data.index = pd.to_datetime(sp_data['Date'])
+vix_returns = vix_data['Close'].pct_change()[1:]
+sp_returns = sp_data['Close'].pct_change()[1:]
+returns = pd.concat([sp_returns, vix_returns], axis=1)
+returns.dropna(axis = 0, how = 'any', inplace = True)
+returns.columns = ['SP500', 'VIX']
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src python :session lev
+import plotly.express as px
+fig = px.scatter(returns, x="SP500", y="VIX", template='plotly_dark')
+fig.write_html('./implied_vol.html')
+#+end_src
+
+#+RESULTS:
+: None
+
+Daily returns from 1/3/1990 to 9/2/2022.
+
+#+begin_export html
+<iframe src="./implied_vol.html" width="100%" height="800" style="border:none;">
+</iframe>
+#+end_export
+
+#+begin_src python :session lev
+from scipy import stats
+slope, intercept, r, p, se = stats.linregress(returns['SP500'], returns['VIX'])
+#+end_src
+
+#+RESULTS:
+
+In fact, fitting a regression line affords a slope of -4.31, implying a 1% decline in the S&P 500 means a 4.31% increase in the VIX.
 
 * Historical Volatility
 
