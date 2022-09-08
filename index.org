@@ -145,6 +145,14 @@ slope, intercept, r, p, se = stats.linregress(weekly_data['returns'], weekly_dat
 
 ** EGARCH
 
+An EGARCH(1,1) model with normally-distributed innovations takes the form:
+
+$$r_t = \sigma_t\epsilon_t$$
+
+and
+
+$$ln(\sigma_t^2) = (1 - \alpha_1)\alpha_0 + \alpha_1ln(\sigma^2_{t-1})+g(\epsilon_{t-1})$$
+
 
 
 
