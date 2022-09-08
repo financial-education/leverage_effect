@@ -157,6 +157,6 @@ where
 
 $$g(\epsilon_{t-1}) = \theta\epsilon_{t-1} + \gamma(|\epsilon_{t-1}| - \sqrt{2/\pi})$$
 
-The ($\gamma + \theta$) and ($\gamma + \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  
+The ($\gamma + \theta$) and ($\gamma + \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  If volatility increases when an asset price declines, then we'll observe $\theta < 0$. The model is nonlinear so long as $\theta \neq 0$ however.
 
 We'll use the =arch= python package to estimate the parameters of an EGARCG(1,1) model.
