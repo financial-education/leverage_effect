@@ -153,7 +153,10 @@ and
 
 $$ln(\sigma_t^2) = (1 - \alpha_1)\alpha_0 + \alpha_1ln(\sigma^2_{t-1})+g(\epsilon_{t-1})$$
 
+where
 
+$$g(\epsilon_{t-1}) = \theta\epsilon_{t-1} + \gamma(|\epsilon_{t-1}| - \sqrt{2/\pi})$$
 
+The ($\gamma + \theta$) and ($\gamma + \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  
 
 We'll use the =arch= python package to estimate the parameters of an EGARCG(1,1) model.
