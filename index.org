@@ -159,4 +159,87 @@ $$g(\epsilon_{t-1}) = \theta\epsilon_{t-1} + \gamma(|\epsilon_{t-1}| - \sqrt{2/\
 
 The ($\gamma + \theta$) and ($\gamma + \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  If volatility increases when an asset price declines, then we'll observe $\theta < 0$. The model is nonlinear so long as $\theta \neq 0$ however.
 
-We'll use the =arch= python package to estimate the parameters of an EGARCG(1,1) model.
+We'll use the =arch= python package to estimate the parameters of an EGARCH(1,1) model.
+
+#+begin_src python :session lev :eval yes
+from arch import arch_model
+from arch.univariate import EGARCH
+#+end_src
+
+#+RESULTS:
+
+#+begin_src python :session lev :eval yes :results output :exports results
+eg = arch_model(weekly_data['returns'] * 100)
+eg.volatility = EGARCH(p=1, o=1, q=1)
+eg_res = eg.fit(update_freq=5, disp="off")
+print(eg_res.summary())
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                     Constant Mean - EGARCH Model Results                     
+==============================================================================
+Dep. Variable:                returns   R-squared:                       0.000
+Mean Model:             Constant Mean   Adj. R-squared:                  0.000
+Vol Model:                     EGARCH   Log-Likelihood:               -3571.47
+Distribution:                  Normal   AIC:                           7152.95
+Method:            Maximum Likelihood   BIC:                           7180.15
+                                        No. Observations:                 1705
+Date:                Fri, Sep 09 2022   Df Residuals:                     1704
+Time:                        18:57:39   Df Model:                            1
+                                Mean Model                                
+==========================================================================
+                 coef    std err          t      P>|t|    95.0% Conf. Int.
+--------------------------------------------------------------------------
+mu             0.1466  4.038e-02      3.632  2.816e-04 [6.750e-02,  0.226]
+                             Volatility Model                             
+==========================================================================
+                 coef    std err          t      P>|t|    95.0% Conf. Int.
+--------------------------------------------------------------------------
+omega          0.1220  3.335e-02      3.659  2.532e-04 [5.667e-02,  0.187]
+alpha[1]       0.3052  5.434e-02      5.616  1.949e-08   [  0.199,  0.412]
+gamma[1]      -0.1913  2.934e-02     -6.519  7.092e-11   [ -0.249, -0.134]
+beta[1]        0.9150  2.064e-02     44.322      0.000   [  0.875,  0.955]
+==========================================================================
+
+Covariance estimator: robust
+#+end_example
+
+
+** GJR-GARCH(1,1)
+
+#+begin_src python :session lev :eval yes :results output :exports results
+gjr = arch_model(weekly_data['returns'] * 100, p=1, o=1, q=1)
+gjr_res = gjr.fit(update_freq=5, disp="off")
+print(gjr_res.summary())
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                   Constant Mean - GJR-GARCH Model Results                    
+==============================================================================
+Dep. Variable:                returns   R-squared:                       0.000
+Mean Model:             Constant Mean   Adj. R-squared:                  0.000
+Vol Model:                  GJR-GARCH   Log-Likelihood:               -3582.32
+Distribution:                  Normal   AIC:                           7174.64
+Method:            Maximum Likelihood   BIC:                           7201.85
+                                        No. Observations:                 1705
+Date:                Fri, Sep 09 2022   Df Residuals:                     1704
+Time:                        18:48:37   Df Model:                            1
+                                Mean Model                                
+==========================================================================
+                 coef    std err          t      P>|t|    95.0% Conf. Int.
+--------------------------------------------------------------------------
+mu             0.1678  4.028e-02      4.166  3.107e-05 [8.883e-02,  0.247]
+                              Volatility Model                             
+===========================================================================
+                 coef    std err          t      P>|t|     95.0% Conf. Int.
+---------------------------------------------------------------------------
+omega          0.2992  8.227e-02      3.637  2.756e-04    [  0.138,  0.461]
+alpha[1]       0.0534  2.876e-02      1.857  6.327e-02 [-2.954e-03,  0.110]
+gamma[1]       0.3095  6.753e-02      4.583  4.579e-06    [  0.177,  0.442]
+beta[1]        0.7449  4.017e-02     18.543  9.218e-77    [  0.666,  0.824]
+===========================================================================
+
+Covariance estimator: robust
+#+end_example

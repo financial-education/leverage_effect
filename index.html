@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-09-08 Thu 11:33 -->
+<!-- 2022-09-09 Fri 18:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Leverage Effect</title>
@@ -45,11 +45,12 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org5f73e38">1. Implied Volatility</a></li>
-<li><a href="#org6ecd980">2. Historical Volatility</a>
+<li><a href="#org05bd57c">1. Implied Volatility</a></li>
+<li><a href="#orgea9a795">2. Historical Volatility</a>
 <ul>
-<li><a href="#org92251cc">2.1. Scatterplots</a></li>
-<li><a href="#org2eae8ee">2.2. EGARCH</a></li>
+<li><a href="#orgeb7315b">2.1. Scatterplots</a></li>
+<li><a href="#org7ee4c9e">2.2. EGARCH</a></li>
+<li><a href="#orgdc0e3a0">2.3. GJR-GARCH(1,1)</a></li>
 </ul>
 </li>
 </ul>
@@ -71,8 +72,8 @@ Below we take a look at the relationship between stock prices and both implied a
 We'll use data from Yahoo Finance:
 </p>
 
-<div id="outline-container-org5f73e38" class="outline-2">
-<h2 id="org5f73e38"><span class="section-number-2">1.</span> Implied Volatility</h2>
+<div id="outline-container-org05bd57c" class="outline-2">
+<h2 id="org05bd57c"><span class="section-number-2">1.</span> Implied Volatility</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Below we'll take a look at the relationship between changes in the S&amp;P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&amp;P 500.
@@ -91,12 +92,12 @@ In fact, fitting a regression line affords a slope of -4.31, implying a 1% decli
 </div>
 </div>
 
-<div id="outline-container-org6ecd980" class="outline-2">
-<h2 id="org6ecd980"><span class="section-number-2">2.</span> Historical Volatility</h2>
+<div id="outline-container-orgea9a795" class="outline-2">
+<h2 id="orgea9a795"><span class="section-number-2">2.</span> Historical Volatility</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org92251cc" class="outline-3">
-<h3 id="org92251cc"><span class="section-number-3">2.1.</span> Scatterplots</h3>
+<div id="outline-container-orgeb7315b" class="outline-3">
+<h3 id="orgeb7315b"><span class="section-number-3">2.1.</span> Scatterplots</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 To calculate historical volatility we'll group the data by week, and calculate the realized weekly volatility.
@@ -111,8 +112,8 @@ Weekly returns and realized volatility from 1/3/1990 to 9/2/2022.  Scatter plots
 </div>
 </div>
 
-<div id="outline-container-org2eae8ee" class="outline-3">
-<h3 id="org2eae8ee"><span class="section-number-3">2.2.</span> EGARCH</h3>
+<div id="outline-container-org7ee4c9e" class="outline-3">
+<h3 id="org7ee4c9e"><span class="section-number-3">2.2.</span> EGARCH</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 An EGARCH(1,1) model with normally-distributed innovations takes the form:
@@ -143,15 +144,79 @@ The (\(\gamma + \theta\)) and (\(\gamma + \theta\)) coefficients measure the asy
 </p>
 
 <p>
-We'll use the <code>arch</code> python package to estimate the parameters of an EGARCG(1,1) model.
+We'll use the <code>arch</code> python package to estimate the parameters of an EGARCH(1,1) model.
 </p>
+
+<pre class="example" id="orgf8a328e">
+                     Constant Mean - EGARCH Model Results                     
+==============================================================================
+Dep. Variable:                returns   R-squared:                       0.000
+Mean Model:             Constant Mean   Adj. R-squared:                  0.000
+Vol Model:                     EGARCH   Log-Likelihood:               -3571.47
+Distribution:                  Normal   AIC:                           7152.95
+Method:            Maximum Likelihood   BIC:                           7180.15
+                                        No. Observations:                 1705
+Date:                Fri, Sep 09 2022   Df Residuals:                     1704
+Time:                        18:58:52   Df Model:                            1
+                                Mean Model                                
+==========================================================================
+                 coef    std err          t      P&gt;|t|    95.0% Conf. Int.
+--------------------------------------------------------------------------
+mu             0.1466  4.038e-02      3.632  2.816e-04 [6.750e-02,  0.226]
+                             Volatility Model                             
+==========================================================================
+                 coef    std err          t      P&gt;|t|    95.0% Conf. Int.
+--------------------------------------------------------------------------
+omega          0.1220  3.335e-02      3.659  2.532e-04 [5.667e-02,  0.187]
+alpha[1]       0.3052  5.434e-02      5.616  1.949e-08   [  0.199,  0.412]
+gamma[1]      -0.1913  2.934e-02     -6.519  7.092e-11   [ -0.249, -0.134]
+beta[1]        0.9150  2.064e-02     44.322      0.000   [  0.875,  0.955]
+==========================================================================
+
+Covariance estimator: robust
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-orgdc0e3a0" class="outline-3">
+<h3 id="orgdc0e3a0"><span class="section-number-3">2.3.</span> GJR-GARCH(1,1)</h3>
+<div class="outline-text-3" id="text-2-3">
+<pre class="example" id="org06836b3">
+                   Constant Mean - GJR-GARCH Model Results                    
+==============================================================================
+Dep. Variable:                returns   R-squared:                       0.000
+Mean Model:             Constant Mean   Adj. R-squared:                  0.000
+Vol Model:                  GJR-GARCH   Log-Likelihood:               -3582.32
+Distribution:                  Normal   AIC:                           7174.64
+Method:            Maximum Likelihood   BIC:                           7201.85
+                                        No. Observations:                 1705
+Date:                Fri, Sep 09 2022   Df Residuals:                     1704
+Time:                        18:58:52   Df Model:                            1
+                                Mean Model                                
+==========================================================================
+                 coef    std err          t      P&gt;|t|    95.0% Conf. Int.
+--------------------------------------------------------------------------
+mu             0.1678  4.028e-02      4.166  3.107e-05 [8.883e-02,  0.247]
+                              Volatility Model                             
+===========================================================================
+                 coef    std err          t      P&gt;|t|     95.0% Conf. Int.
+---------------------------------------------------------------------------
+omega          0.2992  8.227e-02      3.637  2.756e-04    [  0.138,  0.461]
+alpha[1]       0.0534  2.876e-02      1.857  6.327e-02 [-2.954e-03,  0.110]
+gamma[1]       0.3095  6.753e-02      4.583  4.579e-06    [  0.177,  0.442]
+beta[1]        0.7449  4.017e-02     18.543  9.218e-77    [  0.666,  0.824]
+===========================================================================
+
+Covariance estimator: robust
+</pre>
 </div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2022-09-08 Thu 11:33</p>
+<p class="date">Created: 2022-09-09 Fri 18:58</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
