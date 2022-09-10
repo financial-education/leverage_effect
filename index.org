@@ -159,6 +159,8 @@ $$g(\epsilon_{t-1}) = \theta\epsilon_{t-1} + \gamma(|\epsilon_{t-1}| - \sqrt{2/\
 
 The ($\gamma + \theta$) and ($\gamma + \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  If volatility increases when an asset price declines, then we'll observe $\theta < 0$. The model is nonlinear so long as $\theta \neq 0$ however.
 
+For further reading [[https://vlab.stern.nyu.edu/docs/volatility/EGARCH][see this documentation on the EGARCH model.]]
+
 We'll use the =arch= python package to estimate the parameters of an EGARCH(1,1) model.
 
 #+begin_src python :session lev :eval yes
@@ -207,6 +209,8 @@ Covariance estimator: robust
 
 
 ** GJR-GARCH(1,1)
+
+The GJR-GARCH model also captures the leverage effect.  See [[https://vlab.stern.nyu.edu/docs/volatility/GJR-GARCH][this documentation on the GJR-GARCH model.]]
 
 #+begin_src python :session lev :eval yes :results output :exports results
 gjr = arch_model(weekly_data['returns'] * 100, p=1, o=1, q=1)
