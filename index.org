@@ -157,11 +157,24 @@ where
 
 $$g(\epsilon_{t-1}) = \theta\epsilon_{t-1} + \gamma(|\epsilon_{t-1}| - \sqrt{2/\pi})$$
 
-The ($\gamma + \theta$) and ($\gamma + \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  If volatility increases when an asset price declines, then we'll observe $\theta < 0$. The model is nonlinear so long as $\theta \neq 0$ however.
+The ($\gamma + \theta$) and ($\gamma - \theta$) coefficients measure the asymmetry in the response of volatility to $r_{t-1}$.  If volatility increases when an asset price declines, then we'll observe $\theta < 0$. The model is nonlinear so long as $\theta \neq 0$ however.
 
 For further reading [[https://vlab.stern.nyu.edu/docs/volatility/EGARCH][see this documentation on the EGARCH model.]]
 
 We'll use the =arch= python package to estimate the parameters of an EGARCH(1,1) model.
+
+In the [[https://github.com/bashtage/arch/blob/main/arch/univariate/volatility.py][notation of the arch package]]:
+
+$$
+\ln\sigma_{t}^{2}=\omega
+        +\sum_{i=1}^{p}\alpha_{i}
+        \left(\left|e_{t-i}\right|-\sqrt{2/\pi}\right)
+        +\sum_{j=1}^{o}\gamma_{j} e_{t-j}
+        +\sum_{k=1}^{q}\beta_{k}\ln\sigma_{t-k}^{2}
+$$
+$$
+    \texttt{where } e_{t}=\epsilon_{t}/\sigma_{t}
+$$
 
 #+begin_src python :session lev :eval yes
 from arch import arch_model
@@ -207,6 +220,11 @@ beta[1]        0.9150  2.064e-02     44.322      0.000   [  0.875,  0.955]
 Covariance estimator: robust
 #+end_example
 
+
+In the notation of the =arch= package, $\gamma$ (gamma) is the $\theta$ coefficient in our notation.   We thus see $\gamma$ is a negative and significant -6.52.  This is evidence of the /leverage effect/ in historical data.
+
+Positive returns: $0.305 + (-0.191) = 0.114$
+Negative returns: $0.305 - (-0.191) = 0.496$
 
 ** GJR-GARCH(1,1)
 
