@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-09-19 Mon 18:45 -->
+<!-- 2024-05-13 Mon 14:58 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Leverage Effect</title>
@@ -16,27 +16,38 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <style>pre.src{background:#343131;color:white;} </style>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
@@ -45,25 +56,57 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org44405bb">1. Implied Volatility</a></li>
-<li><a href="#orgbfb1be7">2. Historical Volatility</a>
+<li><a href="#org7377ee5">0.1. Leverage Hypothesis</a></li>
+<li><a href="#orgd530e57">0.2. Volatility-Feedback Hypothesis</a></li>
+</ul>
+</li>
+<li><a href="#org810baa3">1. A Look at the Data</a>
 <ul>
-<li><a href="#org6d7a2d0">2.1. Scatterplots</a></li>
-<li><a href="#org4d3265a">2.2. EGARCH</a></li>
-<li><a href="#org18a2463">2.3. GJR-GARCH(1,1)</a></li>
+<li><a href="#orgb9675c4">1.1. Implied Volatility</a></li>
+<li><a href="#orgc4256a1">1.2. Historical Volatility</a>
+<ul>
+<li><a href="#org28d6651">1.2.1. Scatterplots</a></li>
 </ul>
 </li>
 </ul>
+</li>
+<li><a href="#orgc57be4a">2. Modeling the Leverage Effect</a>
+<ul>
+<li><a href="#org8adc2ff">2.1. EGARCH</a></li>
+<li><a href="#orga16e22a">2.2. GJR-GARCH(1,1)</a></li>
+</ul>
 </div>
 </div>
 <p>
-The <b>Leverage Effect</b> is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  
+The <b>Leverage Effect</b> is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  This is an empirically observed effect, and we are not sure of the cause. There are two main explanations however:
+</p>
+
+<div id="outline-container-org7377ee5" class="outline-3">
+<h3 id="org7377ee5"><span class="section-number-3">0.1.</span> Leverage Hypothesis</h3>
+<div class="outline-text-3" id="text-0-1">
+<p>
+This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the <i>leverage effect</i> after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Note, if a firm doesn't have any debt the leverage effect would still hold given mandatory selling, general, and administrative expenses.
 </p>
 
 <p>
-This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the <i>leverage effect</i> after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Empirical evidence, however, generally <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=256109">doesn't support this leverage explanation of the <i>Leverage Effect</i></a>.  The phenomena tends to occur in down markets, though not when leverage changes for other reasons.
+Empirical evidence, however, generally <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=256109">doesn't support this leverage explanation of the <i>Leverage Effect</i></a>.  The phenomena tends to occur in down markets, though not when leverage changes for other reasons.  Also, volatility tend to increase more than can be explained by the change in leverage alone.
 </p>
+</div>
+</div>
 
+<div id="outline-container-orgd530e57" class="outline-3">
+<h3 id="orgd530e57"><span class="section-number-3">0.2.</span> Volatility-Feedback Hypothesis</h3>
+<div class="outline-text-3" id="text-0-2">
+<p>
+In this hypothesis volatility rises first, and this causes negative returns (which means <i>expected</i> returns increase).  So this hypothesis works in the opposite direction as the leverage hypothesis. 
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org810baa3" class="outline-2">
+<h2 id="org810baa3"><span class="section-number-2">1.</span> A Look at the Data</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 Below we take a look at the relationship between stock prices and both implied and historical volatility.
 </p>
@@ -71,10 +114,11 @@ Below we take a look at the relationship between stock prices and both implied a
 <p>
 We'll use data from Yahoo Finance:
 </p>
+</div>
 
-<div id="outline-container-org44405bb" class="outline-2">
-<h2 id="org44405bb"><span class="section-number-2">1.</span> Implied Volatility</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-orgb9675c4" class="outline-3">
+<h3 id="orgb9675c4"><span class="section-number-3">1.1.</span> Implied Volatility</h3>
+<div class="outline-text-3" id="text-1-1">
 <p>
 Below we'll take a look at the relationship between changes in the S&amp;P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&amp;P 500.
 </p>
@@ -92,13 +136,13 @@ In fact, fitting a regression line affords a slope of -4.31, implying a 1% decli
 </div>
 </div>
 
-<div id="outline-container-orgbfb1be7" class="outline-2">
-<h2 id="orgbfb1be7"><span class="section-number-2">2.</span> Historical Volatility</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-orgc4256a1" class="outline-3">
+<h3 id="orgc4256a1"><span class="section-number-3">1.2.</span> Historical Volatility</h3>
+<div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-org6d7a2d0" class="outline-3">
-<h3 id="org6d7a2d0"><span class="section-number-3">2.1.</span> Scatterplots</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-org28d6651" class="outline-4">
+<h4 id="org28d6651"><span class="section-number-4">1.2.1.</span> Scatterplots</h4>
+<div class="outline-text-4" id="text-1-2-1">
 <p>
 To calculate historical volatility we'll group the data by week, and calculate the realized weekly volatility.
 </p>
@@ -111,10 +155,16 @@ Weekly returns and realized volatility from 1/3/1990 to 9/2/2022.  Scatter plots
 </iframe>
 </div>
 </div>
+</div>
+</div>
 
-<div id="outline-container-org4d3265a" class="outline-3">
-<h3 id="org4d3265a"><span class="section-number-3">2.2.</span> EGARCH</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-orgc57be4a" class="outline-2">
+<h2 id="orgc57be4a"><span class="section-number-2">2.</span> Modeling the Leverage Effect</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org8adc2ff" class="outline-3">
+<h3 id="org8adc2ff"><span class="section-number-3">2.1.</span> EGARCH</h3>
+<div class="outline-text-3" id="text-2-1">
 <p>
 An EGARCH(1,1) model with normally-distributed innovations takes the form:
 </p>
@@ -168,7 +218,7 @@ In the <a href="https://github.com/bashtage/arch/blob/main/arch/univariate/volat
 \]
 </p>
 
-<pre class="example" id="org79017f0">
+<pre class="example" id="org66f8f9a">
                      Constant Mean - EGARCH Model Results                     
 ==============================================================================
 Dep. Variable:                returns   R-squared:                       0.000
@@ -177,8 +227,8 @@ Vol Model:                     EGARCH   Log-Likelihood:               -3571.47
 Distribution:                  Normal   AIC:                           7152.95
 Method:            Maximum Likelihood   BIC:                           7180.15
                                         No. Observations:                 1705
-Date:                Mon, Sep 19 2022   Df Residuals:                     1704
-Time:                        18:45:48   Df Model:                            1
+Date:                Fri, Sep 09 2022   Df Residuals:                     1704
+Time:                        18:57:39   Df Model:                            1
                                 Mean Model                                
 ==========================================================================
                  coef    std err          t      P&gt;|t|    95.0% Conf. Int.
@@ -209,14 +259,14 @@ Negative returns: \(0.305 - (-0.191) = 0.496\)
 </div>
 </div>
 
-<div id="outline-container-org18a2463" class="outline-3">
-<h3 id="org18a2463"><span class="section-number-3">2.3.</span> GJR-GARCH(1,1)</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orga16e22a" class="outline-3">
+<h3 id="orga16e22a"><span class="section-number-3">2.2.</span> GJR-GARCH(1,1)</h3>
+<div class="outline-text-3" id="text-2-2">
 <p>
 The GJR-GARCH model also captures the leverage effect.  See <a href="https://vlab.stern.nyu.edu/docs/volatility/GJR-GARCH">this documentation on the GJR-GARCH model.</a>
 </p>
 
-<pre class="example" id="org2a25f01">
+<pre class="example" id="org9c750bc">
                    Constant Mean - GJR-GARCH Model Results                    
 ==============================================================================
 Dep. Variable:                returns   R-squared:                       0.000
@@ -225,8 +275,8 @@ Vol Model:                  GJR-GARCH   Log-Likelihood:               -3582.32
 Distribution:                  Normal   AIC:                           7174.64
 Method:            Maximum Likelihood   BIC:                           7201.85
                                         No. Observations:                 1705
-Date:                Mon, Sep 19 2022   Df Residuals:                     1704
-Time:                        18:45:48   Df Model:                            1
+Date:                Fri, Sep 09 2022   Df Residuals:                     1704
+Time:                        18:48:37   Df Model:                            1
                                 Mean Model                                
 ==========================================================================
                  coef    std err          t      P&gt;|t|    95.0% Conf. Int.
@@ -250,7 +300,7 @@ Covariance estimator: robust
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2022-09-19 Mon 18:45</p>
+<p class="date">Created: 2024-05-13 Mon 14:58</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

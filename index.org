@@ -3,10 +3,22 @@
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
 #+PROPERTY: header-args    :exports none
+#+PROPERTY: header-args+   :eval no
 
-The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  
+The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  This is an empirically observed effect, and we are not sure of the cause. There are two main explanations however:
 
-This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the /leverage effect/ after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Empirical evidence, however, generally [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=256109][doesn't support this leverage explanation of the /Leverage Effect/]].  The phenomena tends to occur in down markets, though not when leverage changes for other reasons.
+** Leverage Hypothesis
+
+This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the /leverage effect/ after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Note, if a firm doesn't have any debt the leverage effect would still hold given mandatory selling, general, and administrative expenses.
+
+Empirical evidence, however, generally [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=256109][doesn't support this leverage explanation of the /Leverage Effect/]].  The phenomena tends to occur in down markets, though not when leverage changes for other reasons.  Also, volatility tend to increase more than can be explained by the change in leverage alone.
+
+** Volatility-Feedback Hypothesis
+
+In this hypothesis volatility rises first, and this causes negative returns (which means /expected/ returns increase).  So this hypothesis works in the opposite direction as the leverage hypothesis. 
+
+
+* A Look at the Data
 
 Below we take a look at the relationship between stock prices and both implied and historical volatility.
 
@@ -14,16 +26,13 @@ We'll use data from Yahoo Finance:
 
 #+begin_src python :session lev :eval no
 import yfinance as yf
-#+end_src
-
-#+begin_src python :session lev :eval yes
 import pandas as pd
 #+end_src
 
 #+RESULTS:
 
 
-* Implied Volatility
+** Implied Volatility
 
 Below we'll take a look at the relationship between changes in the S&P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&P 500.
 
@@ -101,10 +110,10 @@ slope, intercept, r, p, se = stats.linregress(returns['SP500'], returns['VIX'])
 
 In fact, fitting a regression line affords a slope of -4.31, implying a 1% decline in the S&P 500 means a 4.31% increase in the VIX.
 
-* Historical Volatility
+** Historical Volatility
 
 
-** Scatterplots
+*** Scatterplots
 
 To calculate historical volatility we'll group the data by week, and calculate the realized weekly volatility.
 
@@ -121,7 +130,7 @@ weekly_data['lagged_vol'] = weekly_data['vol'].shift(1)
 #+RESULTS:
 
 
-#+begin_src python :session lev :eval yes
+#+begin_src python :session lev :eval no
 import plotly.express as px
 fig2 = px.scatter(weekly_data, x="returns", y="lagged_vol", template='plotly_dark')
 fig2.write_html('./realized_vol.html')
@@ -137,11 +146,14 @@ Weekly returns and realized volatility from 1/3/1990 to 9/2/2022.  Scatter plots
 </iframe>
 #+end_export
 
-#+begin_src python :session lev :eval yes
+#+begin_src python :session lev :eval no
 slope, intercept, r, p, se = stats.linregress(weekly_data['returns'], weekly_data['vol'])
 #+end_src
 
 #+RESULTS:
+
+* Modeling the Leverage Effect
+
 
 ** EGARCH
 
@@ -176,14 +188,14 @@ $$
     \texttt{where } e_{t}=\epsilon_{t}/\sigma_{t}
 $$
 
-#+begin_src python :session lev :eval yes
+#+begin_src python :session lev :eval no
 from arch import arch_model
 from arch.univariate import EGARCH
 #+end_src
 
 #+RESULTS:
 
-#+begin_src python :session lev :eval yes :results output :exports results
+#+begin_src python :session lev :eval no :results output :exports results
 eg = arch_model(weekly_data['returns'] * 100)
 eg.volatility = EGARCH(p=1, o=1, q=1)
 eg_res = eg.fit(update_freq=5, disp="off")
@@ -230,7 +242,7 @@ Negative returns: $0.305 - (-0.191) = 0.496$
 
 The GJR-GARCH model also captures the leverage effect.  See [[https://vlab.stern.nyu.edu/docs/volatility/GJR-GARCH][this documentation on the GJR-GARCH model.]]
 
-#+begin_src python :session lev :eval yes :results output :exports results
+#+begin_src python :session lev :eval no :results output :exports results
 gjr = arch_model(weekly_data['returns'] * 100, p=1, o=1, q=1)
 gjr_res = gjr.fit(update_freq=5, disp="off")
 print(gjr_res.summary())
