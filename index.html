@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-05-13 Mon 14:58 -->
+<!-- 2024-05-13 Mon 21:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Leverage Effect</title>
@@ -56,33 +56,34 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org7377ee5">0.1. Leverage Hypothesis</a></li>
-<li><a href="#orgd530e57">0.2. Volatility-Feedback Hypothesis</a></li>
+<li><a href="#org8b09533">0.1. Leverage Hypothesis</a></li>
+<li><a href="#org9aee720">0.2. Volatility-Feedback Hypothesis</a></li>
 </ul>
 </li>
-<li><a href="#org810baa3">1. A Look at the Data</a>
+<li><a href="#orgc574caf">1. A Look at the Data</a>
 <ul>
-<li><a href="#orgb9675c4">1.1. Implied Volatility</a></li>
-<li><a href="#orgc4256a1">1.2. Historical Volatility</a>
+<li><a href="#orgd24c2f3">1.1. Implied Volatility</a></li>
+<li><a href="#orgb4dc6ec">1.2. Historical Volatility</a>
 <ul>
-<li><a href="#org28d6651">1.2.1. Scatterplots</a></li>
+<li><a href="#org9219bbf">1.2.1. Scatterplots</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgc57be4a">2. Modeling the Leverage Effect</a>
+<li><a href="#org1188e04">2. Modeling the Leverage Effect</a>
 <ul>
-<li><a href="#org8adc2ff">2.1. EGARCH</a></li>
-<li><a href="#orga16e22a">2.2. GJR-GARCH(1,1)</a></li>
+<li><a href="#org8083101">2.1. EGARCH</a></li>
+<li><a href="#org301ac77">2.2. GJR-GARCH(1,1)</a></li>
 </ul>
-</div>
+</li>
+<li><a href="#org6952e12">3. References</a></div>
 </div>
 <p>
 The <b>Leverage Effect</b> is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  This is an empirically observed effect, and we are not sure of the cause. There are two main explanations however:
 </p>
 
-<div id="outline-container-org7377ee5" class="outline-3">
-<h3 id="org7377ee5"><span class="section-number-3">0.1.</span> Leverage Hypothesis</h3>
+<div id="outline-container-org8b09533" class="outline-3">
+<h3 id="org8b09533"><span class="section-number-3">0.1.</span> Leverage Hypothesis</h3>
 <div class="outline-text-3" id="text-0-1">
 <p>
 This observation was first made by Fischer Black (of the Black-Scholes model) in a research paper (Black (1976)).  In this paper he coined the <i>leverage effect</i> after his explanation for the phenomena.  Black hypothesized that stock declines increase leverage, and it is the increased leverage which causes the increased volatility.  Note, if a firm doesn't have any debt the leverage effect would still hold given mandatory selling, general, and administrative expenses.
@@ -94,18 +95,18 @@ Empirical evidence, however, generally <a href="https://papers.ssrn.com/sol3/pap
 </div>
 </div>
 
-<div id="outline-container-orgd530e57" class="outline-3">
-<h3 id="orgd530e57"><span class="section-number-3">0.2.</span> Volatility-Feedback Hypothesis</h3>
+<div id="outline-container-org9aee720" class="outline-3">
+<h3 id="org9aee720"><span class="section-number-3">0.2.</span> Volatility-Feedback Hypothesis</h3>
 <div class="outline-text-3" id="text-0-2">
 <p>
-In this hypothesis volatility rises first, and this causes negative returns (which means <i>expected</i> returns increase).  So this hypothesis works in the opposite direction as the leverage hypothesis. 
+In this hypothesis (in \cite{Campbell_1992}) volatility rises first, and this causes negative returns (which means <i>expected</i> returns increase).  So this hypothesis works in the opposite direction as the leverage hypothesis. 
 </p>
 </div>
 </div>
 
 
-<div id="outline-container-org810baa3" class="outline-2">
-<h2 id="org810baa3"><span class="section-number-2">1.</span> A Look at the Data</h2>
+<div id="outline-container-orgc574caf" class="outline-2">
+<h2 id="orgc574caf"><span class="section-number-2">1.</span> A Look at the Data</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Below we take a look at the relationship between stock prices and both implied and historical volatility.
@@ -116,8 +117,8 @@ We'll use data from Yahoo Finance:
 </p>
 </div>
 
-<div id="outline-container-orgb9675c4" class="outline-3">
-<h3 id="orgb9675c4"><span class="section-number-3">1.1.</span> Implied Volatility</h3>
+<div id="outline-container-orgd24c2f3" class="outline-3">
+<h3 id="orgd24c2f3"><span class="section-number-3">1.1.</span> Implied Volatility</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Below we'll take a look at the relationship between changes in the S&amp;P 500 index, and changes in the VIX.  The VIX measures implied volatility in options on the S&amp;P 500.
@@ -136,12 +137,12 @@ In fact, fitting a regression line affords a slope of -4.31, implying a 1% decli
 </div>
 </div>
 
-<div id="outline-container-orgc4256a1" class="outline-3">
-<h3 id="orgc4256a1"><span class="section-number-3">1.2.</span> Historical Volatility</h3>
+<div id="outline-container-orgb4dc6ec" class="outline-3">
+<h3 id="orgb4dc6ec"><span class="section-number-3">1.2.</span> Historical Volatility</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-org28d6651" class="outline-4">
-<h4 id="org28d6651"><span class="section-number-4">1.2.1.</span> Scatterplots</h4>
+<div id="outline-container-org9219bbf" class="outline-4">
+<h4 id="org9219bbf"><span class="section-number-4">1.2.1.</span> Scatterplots</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 To calculate historical volatility we'll group the data by week, and calculate the realized weekly volatility.
@@ -158,12 +159,12 @@ Weekly returns and realized volatility from 1/3/1990 to 9/2/2022.  Scatter plots
 </div>
 </div>
 
-<div id="outline-container-orgc57be4a" class="outline-2">
-<h2 id="orgc57be4a"><span class="section-number-2">2.</span> Modeling the Leverage Effect</h2>
+<div id="outline-container-org1188e04" class="outline-2">
+<h2 id="org1188e04"><span class="section-number-2">2.</span> Modeling the Leverage Effect</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org8adc2ff" class="outline-3">
-<h3 id="org8adc2ff"><span class="section-number-3">2.1.</span> EGARCH</h3>
+<div id="outline-container-org8083101" class="outline-3">
+<h3 id="org8083101"><span class="section-number-3">2.1.</span> EGARCH</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 An EGARCH(1,1) model with normally-distributed innovations takes the form:
@@ -218,7 +219,7 @@ In the <a href="https://github.com/bashtage/arch/blob/main/arch/univariate/volat
 \]
 </p>
 
-<pre class="example" id="org66f8f9a">
+<pre class="example" id="orgce9cea0">
                      Constant Mean - EGARCH Model Results                     
 ==============================================================================
 Dep. Variable:                returns   R-squared:                       0.000
@@ -259,14 +260,14 @@ Negative returns: \(0.305 - (-0.191) = 0.496\)
 </div>
 </div>
 
-<div id="outline-container-orga16e22a" class="outline-3">
-<h3 id="orga16e22a"><span class="section-number-3">2.2.</span> GJR-GARCH(1,1)</h3>
+<div id="outline-container-org301ac77" class="outline-3">
+<h3 id="org301ac77"><span class="section-number-3">2.2.</span> GJR-GARCH(1,1)</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 The GJR-GARCH model also captures the leverage effect.  See <a href="https://vlab.stern.nyu.edu/docs/volatility/GJR-GARCH">this documentation on the GJR-GARCH model.</a>
 </p>
 
-<pre class="example" id="org9c750bc">
+<pre class="example" id="org4c46384">
                    Constant Mean - GJR-GARCH Model Results                    
 ==============================================================================
 Dep. Variable:                returns   R-squared:                       0.000
@@ -297,10 +298,15 @@ Covariance estimator: robust
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-org6952e12" class="outline-2">
+<h2 id="org6952e12"><span class="section-number-2">3.</span> References</h2>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Matt Brigida, Ph.D.</p>
-<p class="date">Created: 2024-05-13 Mon 14:58</p>
+<p class="date">Created: 2024-05-13 Mon 21:07</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

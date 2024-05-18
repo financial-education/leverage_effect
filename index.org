@@ -4,6 +4,7 @@
 #+HTML_HEAD: <style>pre.src{background:#343131;color:white;} </style>
 #+PROPERTY: header-args    :exports none
 #+PROPERTY: header-args+   :eval no
+#+LATEX_HEADER: \addbibresource{references.bib}
 
 The *Leverage Effect* is the observation that the volatility of an asset is decreasing in the asset price.  That is, if an asset falls in price the asset's volatility increases, and if it rises in price the asset's volatility declines.  So another way of saying this is the asset's returns and volatility are negatively correlated.  This is an empirically observed effect, and we are not sure of the cause. There are two main explanations however:
 
@@ -15,7 +16,7 @@ Empirical evidence, however, generally [[https://papers.ssrn.com/sol3/papers.cfm
 
 ** Volatility-Feedback Hypothesis
 
-In this hypothesis volatility rises first, and this causes negative returns (which means /expected/ returns increase).  So this hypothesis works in the opposite direction as the leverage hypothesis. 
+In this hypothesis (in \cite{Campbell_1992}) volatility rises first, and this causes negative returns (which means /expected/ returns increase).  So this hypothesis works in the opposite direction as the leverage hypothesis. 
 
 
 * A Look at the Data
@@ -154,6 +155,7 @@ slope, intercept, r, p, se = stats.linregress(weekly_data['returns'], weekly_dat
 
 * Modeling the Leverage Effect
 
+Below we'll use the =arch= python package to estimate two asymmetric volatility models.  Since these models allow volatility to react differently depending on the sign of the returns, they allow us to estimate the leverage effect.  
 
 ** EGARCH
 
@@ -277,3 +279,6 @@ beta[1]        0.7449  4.017e-02     18.543  9.218e-77    [  0.666,  0.824]
 
 Covariance estimator: robust
 #+end_example
+
+
+* References
