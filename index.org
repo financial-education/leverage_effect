@@ -177,7 +177,7 @@ For further reading [[https://vlab.stern.nyu.edu/docs/volatility/EGARCH][see thi
 
 We'll use the =arch= python package to estimate the parameters of an EGARCH(1,1) model.
 
-In the [[https://github.com/bashtage/arch/blob/main/arch/univariate/volatility.py][notation of the arch package]]:
+Plugging $g(\epsilon_{t-1})$ into $ln(\sigma_t^2)$, and using the [[https://github.com/bashtage/arch/blob/main/arch/univariate/volatility.py][notation of the arch package]] (which is unfortunately different from the standard in Tsay's text):
 
 $$
 \ln\sigma_{t}^{2}=\omega
